@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 
-import { Londrina_Solid } from "next/font/google";
+import { Londrina_Solid, Poppins } from "next/font/google";
 import "./globals.css";
 
 import Provider from "./provider";
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
 
 const londrinaSolid = Londrina_Solid({
   variable: "--font-londrina-solid",
@@ -24,11 +30,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookies = headers().get("cookie");
   return (
     <html lang="en">
-      <Provider cookies={cookies}>
-        <body className={`${londrinaSolid.variable} antialiased`}>
+      <Provider>
+        <body
+          className={`${poppins.variable} ${londrinaSolid.variable} antialiased`}
+        >
           {children}
         </body>
       </Provider>

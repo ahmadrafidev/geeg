@@ -1,5 +1,3 @@
-import { cookieStorage, createStorage } from "wagmi";
-
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { flowTestnet } from "viem/chains";
 
@@ -19,9 +17,8 @@ export const networks = [
 
 export const wagmiAdapter = new WagmiAdapter({
   projectId,
-  storage: createStorage({ storage: cookieStorage }),
   ssr: true,
   networks,
 });
 
-export const config = wagmiAdapter.wagmiConfig;
+export const wagmiConfig = wagmiAdapter.wagmiConfig;
