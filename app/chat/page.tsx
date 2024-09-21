@@ -31,7 +31,7 @@ export default function Chat() {
 
   const handleSendMessage = async () => {
     if (inputMessage.trim()) {
-      const newMessage = { role: "user", content: inputMessage };
+      const newMessage: Message = { role: "user", content: inputMessage };
       
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInputMessage("");
@@ -74,8 +74,8 @@ export default function Chat() {
       <footer className="bg-white dark:bg-gray-800 p-4">
         <div className="flex items-center max-w-3xl mx-auto">
           <Input
-            className="flex-grow mr-2 md:w-3/4 min-h-[3rem] max-h-[5rem]"
-            placeholder="Type a message"
+            className="flex-grow mr-2 md:w-3/4 min-h-[3rem] max-h-[5rem] rounded-lg"
+            placeholder="Type a message..."
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
@@ -84,7 +84,7 @@ export default function Chat() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="w-12 min-h-[3rem] max-h-[5rem]"
+            className="w-12 min-h-[3rem] max-h-[5rem] rounded-lg" 
             onClick={handleSendMessage}
           >
             <Send />
