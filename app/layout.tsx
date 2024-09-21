@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+
 import { Londrina_Solid } from "next/font/google";
 import "./globals.css";
+
+import Provider from "./provider";
 
 const londrinaSolid = Londrina_Solid({
   variable: "--font-londrina-solid",
@@ -19,11 +23,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookies = headers().get("cookie");
   return (
     <html lang="en">
-      <body className={`${londrinaSolid.variable} antialiased`}>
-        {children}
-      </body>
+      <Provider cookies={cookies}>
+        <body className={`${londrinaSolid.variable} antialiased`}>
+          {children}
+        </body>
+      </Provider>
     </html>
   );
 }
