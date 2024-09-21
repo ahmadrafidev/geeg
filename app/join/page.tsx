@@ -31,56 +31,62 @@ export default function JoinPage() {
         </div>
 
         <section className="flex flex-col items-start justify-center text-foreground">
-          <h1 className="font-londrina text-5xl font-black tracking-wide">
-            Join the Freelancing{" "}
-            <span className="text-primary">Revolution</span>
-          </h1>
 
-          <p className="mt-6">
-            Connect your wallet to access a world of opportunities:
-          </p>
+          <div className="grid grid-rows-2 gap-4">
+            <div>
+              <h1 className="font-londrina text-5xl font-black tracking-wide">
+                Join the Freelancing{" "}
+                <span className="text-primary">Revolution</span>
+              </h1>
 
-          <ul className="mt-1.5 list-inside list-disc space-y-2 text-sm text-muted-foreground">
-            <li>Find high-paying gigs tailored to your skills</li>
-            <li>Secure, blockchain contracts and payments</li>
-            <li>Build reputation with verifiable work history</li>
-          </ul>
+              <p className="mt-6 font-medium text-xl">
+                Connect your wallet to access a world of opportunities:
+              </p>
 
-          <p className="mt-2 text-sm">
-            Join thousands of freelancers who are already benefiting from our
-            decentralized platform.
-          </p>
+              <ul className="mt-1.5 list-inside list-disc space-y-2 font-normal text-sm text-muted-foreground">
+                <li>Find high-paying gigs tailored to your skills</li>
+                <li>Secure, blockchain contracts and payments</li>
+                <li>Build reputation with verifiable work history</li>
+              </ul>
 
-          <div className="mt-8 flex flex-col rounded-lg border-2 bg-card p-4">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Register Now
-            </h1>
+              <p className="mt-2 text-sm font-medium">
+                Join thousands of freelancers who are already benefiting from our
+                decentralized platform.
+              </p>
+            </div>
 
-            <p className="text-muted-foregrounds mt-1.5 text-sm">
-              Connect your wallet or login with socials to get started
-            </p>
+            <div className="mt-8 flex flex-col rounded-lg border-2 bg-card p-4">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Register Now
+              </h1>
 
-            <Button
-              className="mt-2 w-full space-x-2 font-medium"
-              variant="outline"
-              size="lg"
-              onClick={() => open({ view: "Connect" })}
-            >
-              <LogInIcon className="h-4 w-4" />
-              <span>Login with socials</span>
-            </Button>
+              <p className="text-muted-foreground mt-1.5 text-sm">
+                Connect your wallet or login with socials to get started
+              </p>
 
-            <Button
-              className="mt-2 w-full space-x-2 font-medium"
-              size="lg"
-              onClick={() => open({ view: "Connect" })}
-            >
-              <WalletIcon className="h-4 w-4" />
-              <span>Connect wallet</span>
-            </Button>
+              <Button
+                className="mt-2 w-full space-x-2 font-medium"
+                variant="outline"
+                size="lg"
+                onClick={() => open({ view: "Connect" })}
+              >
+                <LogInIcon className="h-4 w-4" />
+                <span>Login with socials</span>
+              </Button>
+
+              <Button
+                className="mt-2 w-full space-x-2 font-medium"
+                size="lg"
+                onClick={() => open({ view: "Connect" })}
+              >
+                <WalletIcon className="h-4 w-4" />
+                <span>Connect wallet</span>
+              </Button>
+            </div>
           </div>
         </section>
       </main>
     </div>
   );
 }
+

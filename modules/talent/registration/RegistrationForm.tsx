@@ -85,7 +85,7 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("max-w-sm space-y-4", className)}
+        className={cn("grid grid-cols-1 md:grid-cols-2 gap-6", className)}
       >
         <FormField
           control={form.control}
@@ -165,6 +165,27 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
 
         <FormField
           control={form.control}
+          name="hourlyRate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Hourly Rate ($)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  onChange={(e) => field.onChange(+e.target.value)}
+                />
+              </FormControl>
+              <FormDescription>
+                Your desired hourly rate in USD.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="skills"
           render={({ field }) => (
             <FormItem>
@@ -194,30 +215,11 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="hourlyRate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Hourly Rate ($)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(+e.target.value)}
-                />
-              </FormControl>
-              <FormDescription>
-                Your desired hourly rate in USD.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" disabled={isLoading}>
-          Submit
-        </Button>
+        <div className="col-span-2 flex justify-end">
+          <Button type="submit" disabled={isLoading}>
+            Submit
+          </Button>
+        </div>
       </form>
     </Form>
   );

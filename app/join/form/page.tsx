@@ -25,16 +25,16 @@ export default function JoinFormPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <div className="container flex grow items-center justify-center py-8">
-        <section className="flex flex-col rounded-lg border bg-card p-4">
-          <h1 className="text-2xl font-semibold tracking-tight">
+        <section className="flex flex-col rounded-lg border bg-card p-4 justify-center items-center">
+          <h1 className="text-3xl font-semibold tracking-tight">
             Talent Registration Form
           </h1>
 
-          <p className="text-muted-foregrounds mt-1.5 text-sm">
+          <p className="text-muted-foregrounds mt-1.5 text-base">
             Fill out basic details to create your account
           </p>
 
-          <RegistrationForm className="mt-4" />
+          <RegistrationForm className="mt-6" />
         </section>
       </div>
     </div>
