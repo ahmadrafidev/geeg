@@ -1,6 +1,10 @@
-"use client";
+import { FC, useState } from "react";
 
-import { FC } from "react";
+import { useAccount } from "wagmi";
+import { registerTalent } from "@/actions/talent/register";
+
+import { useAtomValue } from "jotai";
+import { talentAtom } from "@/stores/talent";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -47,6 +51,9 @@ type RegistrationFormProps = {
 };
 
 const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
+  const { address } = useAccount();
+  const { refetch } = useAtomValue(talentAtom);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,8 +65,14 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const [isLoading, setLoading] = useState(false);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!address) return;
+
+    setLoading(true);
+    await registerTalent({ ...values, address });
+    await refetch();
+    setLoading(false);
   };
 
   const skills = form
@@ -202,7 +215,7 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isLoading}>Submit</Button>
       </form>
     </Form>
   );
