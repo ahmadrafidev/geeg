@@ -27,6 +27,10 @@ createAppKit({
   defaultNetwork: networks[0],
   metadata: metadata,
   allWallets: "HIDE",
+  themeVariables: {
+    '--w3m-accent': '#34D399',
+    '--w3m-color-mix-strength': 0
+  }
 });
 
 function Provider({
