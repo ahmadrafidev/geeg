@@ -1,37 +1,47 @@
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import Image from "next/image";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="bg-white min-h-screen">
-      <header className="flex justify-between items-center p-4 md:px-16 border-b">
-        <div className="text-2xl font-bold text-gray-700">Geeg</div>
-        <nav className="hidden md:flex space-x-4">
-          <Button className="bg-green-500 hover:bg-green-600 text-white">Join</Button>
-        </nav>
+    <div className="min-h-screen bg-white">
+      <header className="sticky top-0 py-4">
+        <div className="container mx-auto flex items-center justify-between">
+          <Link className="flex items-center space-x-1 text-primary" href="/">
+            <Image alt="" src="/icon.svg" width={20} height={20} />
+            <p className="font-londrina text-2xl font-black tracking-wider">
+              Geeg
+            </p>
+          </Link>
+
+          <nav className="hidden space-x-4 md:flex">
+            <Button>Join</Button>
+          </nav>
+        </div>
       </header>
-      
-      <main className="bg-green-800 p-8 md:p-16">
-        <div className="max-w-4xl mx-auto relative">
-          <div className="mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              Find the right <span className="text-green-300">Talent</span>,<br/> right away
+
+      <main className="flex flex-col">
+        <section className="bg-card py-32">
+          <div className="container mx-auto flex flex-col">
+            <h1 className="mb-4 font-londrina text-4xl font-bold tracking-wide text-card-foreground md:text-6xl">
+              Find the right <span className="text-primary">Talent</span>,
+              <br /> right away
             </h1>
-            <div className="flex">
-              <Input 
-                className="flex-grow rounded-r-none border border-green-600" 
-                placeholder="Search for any talent, service, etc" 
-              />
-              <Button className="bg-green-900 hover:bg-green-950 rounded-l-none">
+
+            <div className="flex space-x-1 rounded-lg border p-1">
+              <Input placeholder="Search for any talent, service, etc" />
+              <Button size="icon">
                 <SearchIcon className="h-5 w-5" />
               </Button>
             </div>
-          </div> 
-        </div>
+          </div>
+        </section>
       </main>
-      
-      <section className="py-12 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+
+      <section className="px-4 py-12">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 md:grid-cols-4">
           {[
             { icon: "💻", name: "Programming & Tech" },
             { icon: "🎨", name: "Graphics & Design" },
@@ -42,9 +52,14 @@ export default function Home() {
             { icon: "🎵", name: "Music & Audio" },
             { icon: "💼", name: "Business" },
           ].map((category) => (
-            <div key={category.name} className="flex flex-col items-center text-center">
-              <div className="text-3xl mb-2">{category.icon}</div>
-              <div className="text-sm md:text-base text-primary dark:text-white font-sans font-normal">{category.name}</div>
+            <div
+              key={category.name}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="mb-2 text-3xl">{category.icon}</div>
+              <div className="font-sans text-sm font-normal text-primary dark:text-white md:text-base">
+                {category.name}
+              </div>
             </div>
           ))}
         </div>
@@ -70,5 +85,5 @@ function SearchIcon(props) {
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />
     </svg>
-  )
+  );
 }
