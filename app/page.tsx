@@ -56,11 +56,11 @@ export default function Home() {
 
             <div className="flex space-x-1 rounded-lg border p-1">
               <Input
-                value={searchQuery} // Bind the input to the state
-                onChange={(e) => setSearchQuery(e.target.value)} // Update the state on input change
+                value={searchQuery} 
+                onChange={(e) => setSearchQuery(e.target.value)} 
                 placeholder="Search for any talent, service, etc"
               />
-              <Button size="icon" onClick={handleSearch}>
+              <Button size="icon" onClick={() => handleSearch()}>
                 <SearchIcon className="h-5 w-5" />
               </Button>
             </div>
