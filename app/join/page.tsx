@@ -18,7 +18,7 @@ export default function JoinPage() {
   const { open } = useAppKit();
 
   useEffect(() => {
-    if (address) router.replace("/join/questionnaire");
+    if (address) router.replace("/join/form");
   }, [address, router]);
 
   if (isConnecting || address) return null;
