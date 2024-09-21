@@ -39,10 +39,7 @@ export const modal = createAppKit({
 function AccountProvider({ children }: { children: ReactNode }) {
   const setAccount = useSetAtom(accountAtom);
   useAccountEffect({
-    onConnect: (data) => {
-      console.log(data);
-      setAccount(data);
-    },
+    onConnect: setAccount,
     onDisconnect: () => setAccount(undefined),
   });
 

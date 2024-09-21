@@ -16,7 +16,6 @@ type ChatBubbleProps = {
 };
 
 const ChatBubble: FC<ChatBubbleProps> = ({ className, message }) => {
-  console.log(message);
   if (message.content.startsWith("{") && message.content.endsWith("}")) {
     const brief = JSON.parse(message.content) as Brief;
     return (

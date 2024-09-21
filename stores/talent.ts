@@ -8,7 +8,6 @@ export const talentAtom = atomWithQuery((get) => ({
     const address = get(accountAtom)?.address;
     if (address) {
       const talent = await getTalent({ address });
-      console.log(talent);
       return talent;
     }
     return null;

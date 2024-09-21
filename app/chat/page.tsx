@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type { Message } from "@/constants/chat";
+import type { Brief, Message } from "@/constants/chat";
 
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,8 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ChatBubble } from "@/modules/chat/ChatBubble";
 
 import { Send } from "lucide-react";
+import { Talent } from "@prisma/client";
+import { searchTalent } from "@/actions/talent/search";
 
 const formSchema = z.object({ message: z.string() });
 const initialMessage: Message = {
@@ -23,32 +25,35 @@ const initialMessage: Message = {
   content: "What service are you looking for today?",
 };
 
-export default function ChatPage() {
+export default function ChatPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const router = useRouter();
-  const params = useSearchParams();
-  const query = params.get("q");
+  const query = searchParams["q"];
 
   const [messages, setMessages] = useState<Message[]>([]);
-  const isBriefReady = useMemo(() => {
+  const brief = useMemo(() => {
     const lastMessage = messages.at(-1);
-    return (
+    if (
       lastMessage?.role === "assistant" &&
       lastMessage.content.startsWith("{") &&
       lastMessage.content.endsWith("}")
-    );
+    ) {
+      return JSON.parse(lastMessage.content) as Brief;
+    }
   }, [messages]);
 
+  const [talents, setTalents] = useState<Talent[]>([]);
   useEffect(() => {
-    if (!isBriefReady) return;
-    setMessages((messages) => [
-      ...messages,
-      {
-        role: "assistant",
-        content:
-          "We're currently searching the best talents that match your requirements...",
-      },
-    ]);
-  }, [isBriefReady]);
+    if (!brief) return;
+
+    (async () => {
+      const talents = await searchTalent(brief);
+      setTalents(talents);
+    })();
+  }, [brief]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -190,7 +195,7 @@ export default function ChatPage() {
               Geegs AI
             </h1>
           </div>
-          <div className="flex items-center mt-3">
+          <div className="mt-3 flex items-center space-x-2">
             <p>Powered by</p>
             <Image
               alt="Red Pill"
@@ -201,18 +206,62 @@ export default function ChatPage() {
           </div>
         </div>
 
-        <div className="mt-12 flex w-full flex-col space-y-3 pb-2">
+        <div className="mt-12 flex w-full flex-col space-y-3">
           {messages.map((message, index) => (
             <ChatBubble
               key={`chat-${message.role}-${index}`}
               message={message}
             />
           ))}
+
+          {!!brief && (
+            <ChatBubble
+              message={{
+                role: "assistant",
+                content:
+                  "We're currently searching the best talents that match your requirements...",
+              }}
+            />
+          )}
+
+          {talents.length > 0 && (
+            <ChatBubble
+              message={{
+                role: "assistant",
+                content: `We found ${talents.length} talents that are a match!`,
+              }}
+            />
+          )}
         </div>
+
+        {talents.length > 0 && (
+          <div className="mt-3 grid w-full grid-cols-1 gap-3 overflow-x-auto md:grid-cols-2">
+            {talents.map((talent) => (
+              <div
+                key={`talent-${talent.address}`}
+                className="flex h-full w-full items-center justify-start space-x-4 rounded-lg border bg-card p-4"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className="h-16 w-16 shrink-0 rounded-full"
+                  alt={talent.username}
+                  src={`https://noun-api.com/beta/pfp?name=${talent.address}`}
+                />
+
+                <div className="flex grow flex-col items-start truncate">
+                  <p className="truncate">{talent.username}</p>
+                  <p className="mt-1 truncate text-sm text-muted-foreground">
+                    {talent.skills.slice(0, 3).join(", ")}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <Form {...form}>
           <form
-            className="sticky bottom-0 mt-auto flex w-full items-center space-x-2"
+            className="sticky bottom-0 mt-auto flex w-full items-center space-x-2 pt-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
@@ -222,9 +271,9 @@ export default function ChatPage() {
                 <FormItem className="grow">
                   <FormControl>
                     <Input
-                      className="bg-background"
+                      className="h-full bg-background"
                       placeholder="Type a message..."
-                      disabled={isLoading}
+                      disabled={isLoading || !!brief}
                       {...field}
                     />
                   </FormControl>
@@ -236,7 +285,7 @@ export default function ChatPage() {
               className="max-h-[5rem] min-h-[3rem] w-12 rounded-lg"
               variant="ghost"
               size="icon"
-              disabled={isLoading}
+              disabled={isLoading || !!brief}
             >
               <Send />
             </Button>
