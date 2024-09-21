@@ -29,9 +29,8 @@ export default function Home() {
 
   const [isLoading, setLoading] = useState(false);
   const onSubmit = async ({ query }: z.infer<typeof formSchema>) => {
-    console.log(query);
     setLoading(true);
-    router.push(`/search?q=${encodeURIComponent(query)}`);
+    router.push(`/chat?q=${encodeURIComponent(query)}`);
   };
 
   return (

@@ -1,98 +1,248 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import type { Message } from "@/constants/chat";
+
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { ChatBubble } from "@/modules/chat/ChatBubble";
+
 import { Send } from "lucide-react";
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
+const formSchema = z.object({ message: z.string() });
+const initialMessage: Message = {
+  role: "assistant",
+  content: "What service are you looking for today?",
+};
 
-export default function Chat() {
+export default function ChatPage() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const query = params.get("q");
+
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState("");
+  const isBriefReady = useMemo(() => {
+    const lastMessage = messages.at(-1);
+    return (
+      lastMessage?.role === "assistant" &&
+      lastMessage.content.startsWith("{") &&
+      lastMessage.content.endsWith("}")
+    );
+  }, [messages]);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await fetch("/api/chat");
-        const data = await response.json();
-        setMessages(data.messages);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    };
+    if (!isBriefReady) return;
+    setMessages((messages) => [
+      ...messages,
+      {
+        role: "assistant",
+        content:
+          "We're currently searching the best talents that match your requirements...",
+      },
+    ]);
+  }, [isBriefReady]);
 
-    fetchMessages();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { message: "" },
+  });
+
+  const converse = useCallback(async (messages: Message[]) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_PHALA_REQUIREMENT_AGENT!}&messages=${encodeURIComponent(JSON.stringify(messages))}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    const completion = (await response.json()) as Message;
+    return completion;
   }, []);
 
-  const handleSendMessage = async () => {
-    if (inputMessage.trim()) {
-      const newMessage: Message = { role: "user", content: inputMessage };
+  const [isLoading, setLoading] = useState(true);
+  const onSubmit = async ({ message }: z.infer<typeof formSchema>) => {
+    setLoading(true);
 
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setInputMessage("");
+    const conversation = [
+      ...messages,
+      { role: "user" as const, content: message },
+    ];
+    setMessages(conversation);
 
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newMessage),
-        });
+    try {
+      const response = await converse([
+        ...messages,
+        { role: "user", content: message },
+      ]);
 
-        const data = await response.json();
-
-        setMessages((prevMessages) => [...prevMessages, ...data.messages]);
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
+      setMessages((messages) => [...messages, response]);
+      form.reset();
+    } catch (e) {
+      alert(e);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (!query) return router.replace("/");
+
+    (async () => {
+      const messages = [
+        initialMessage,
+        { role: "user" as const, content: decodeURIComponent(query) },
+      ];
+
+      // Testing for completed conversations
+      // const messages = [
+      //   initialMessage,
+      //   {
+      //     role: "user" as const,
+      //     content: "I want to create a logo for my cafe",
+      //   },
+      //   {
+      //     role: "assistant" as const,
+      //     content:
+      //       "That sounds exciting! Can you describe the type of logo you're envisioning? Any specific elements, style, or colors you'd like incorporated?",
+      //   },
+      //   {
+      //     role: "user" as const,
+      //     content:
+      //       "I want the logo to be green and also have leaf elements. The logo should be minimalistic and modern",
+      //   },
+      //   {
+      //     role: "assistant" as const,
+      //     content:
+      //       "Great choice! A minimalistic and modern green logo with leaf elements will make your cafe stand out. \n\nAre there any particular fonts or typography styles you'd prefer? Also, would you like the logo to include the name of your cafe or any specific text?",
+      //   },
+      //   {
+      //     role: "user" as const,
+      //     content:
+      //       'No preference. The brand is "Kopi Sore", I\'m open to either adding it to the logo or not',
+      //   },
+      //   {
+      //     role: "assistant" as const,
+      //     content:
+      //       'Understood. We have a minimalistic and modern green logo with leaf elements, possibly incorporating the name "Kopi Sore".\n\nAre there any specific deadlines or timeframes you\'re aiming for this project?',
+      //   },
+      //   {
+      //     role: "user" as const,
+      //     content: "I need it by next month",
+      //   },
+      //   {
+      //     role: "assistant" as const,
+      //     content:
+      //       "Got it, so we have a month to develop the logo.\n\nWhat kind of experience are you looking for in a freelancer? For instance, would you prefer someone who has extensive experience in graphic design and logo creation?",
+      //   },
+      //   {
+      //     role: "user" as const,
+      //     content: "Not really, just someone who have a good track record",
+      //   },
+      //   {
+      //     role: "assistant" as const,
+      //     content:
+      //       "Understood. You're looking for someone with a solid track record in graphic design and logo creation.\n\nNow, what is your overall budget for this project?",
+      //   },
+      //   {
+      //     role: "user" as const,
+      //     content: "I have $200 max",
+      //   },
+      //   {
+      //     role: "assistant" as const,
+      //     content:
+      //       'Thank you for providing your budget. Let me summarize the project details we\'ve gathered so far:\n\n**Skills needed:** graphic design, logo creation.\n**Style:** Minimalistic and modern.\n**Color scheme:** Green with leaf elements.\n**Text preference:** Possibly including the name "Kopi Sore", open to both options.\n**Time estimate:** Approximately 20 hours (inferred based on the project\'s nature and minimalistic design).\n**Deadline:** 30 days.\n**Budget:** $200.\n**Hourly rate:** $10/hour (inferred from budget and time estimate).\n**Experience level:** Good track record in graphic design and logo creation.\n\nHere\'s a summary of your project:\n- **Skills needed:** graphic design, logo creation.\n- **Time estimate:** 20 hours.\n- **Deadline:** 30 days.\n- **Budget:** $200.\n- **Hourly rate:** $10/hour.\n- **Experience level:** A freelancer with a good track record in graphic design and logo creation.\n- **Summary:** Create a minimalistic and modern green logo with leaf elements for "Kopi Sore", possibly including the name.\n\nDoes this summary look correct, or would you like to make any changes before I finalize it?',
+      //   },
+      //   {
+      //     role: "user" as const,
+      //     content: "Looks good",
+      //   },
+      // ];
+
+      setMessages(messages);
+
+      try {
+        const response = await converse(messages);
+        setMessages([...messages, response]);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [converse, query, router]);
+
   return (
-    <div className="flex h-screen flex-col bg-white dark:bg-black">
-      <main className="flex flex-grow flex-col space-y-4 overflow-y-auto p-4">
-        <div className="mb-8 flex justify-center">
-          <Image alt="Chat icon" src="/icon.svg" width={60} height={60} />
-        </div>
-
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`my-2 max-w-md rounded-lg p-4 shadow ${
-              msg.role === "user"
-                ? "self-end bg-primary text-base text-white"
-                : "self-start bg-gray-200 text-black"
-            }`}
-          >
-            <p>{msg.content}</p>
+    <div className="flex min-h-screen flex-col">
+      <main className="container flex grow flex-col items-center pt-16">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center space-x-2">
+            <Image alt="" src="/icon.svg" width={60} height={60} />
+            <h1 className="font-londrina text-6xl font-bold text-primary">
+              Geegs AI
+            </h1>
           </div>
-        ))}
-      </main>
-
-      <footer className="bg-white p-4 dark:bg-gray-800">
-        <div className="mx-auto flex max-w-3xl items-center">
-          <Input
-            className="mr-2 max-h-[5rem] min-h-[3rem] flex-grow rounded-lg md:w-3/4"
-            placeholder="Type a message..."
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="max-h-[5rem] min-h-[3rem] w-12 rounded-lg"
-            onClick={handleSendMessage}
-          >
-            <Send />
-          </Button>
+          <div className="flex items-center mt-3">
+            <p>Powered by</p>
+            <Image
+              alt="Red Pill"
+              src="/partners/redpill.svg"
+              width={81}
+              height={24}
+            />
+          </div>
         </div>
-      </footer>
+
+        <div className="mt-12 flex w-full flex-col space-y-3 pb-2">
+          {messages.map((message, index) => (
+            <ChatBubble
+              key={`chat-${message.role}-${index}`}
+              message={message}
+            />
+          ))}
+        </div>
+
+        <Form {...form}>
+          <form
+            className="sticky bottom-0 mt-auto flex w-full items-center space-x-2"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FormField
+              name="message"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="grow">
+                  <FormControl>
+                    <Input
+                      className="bg-background"
+                      placeholder="Type a message..."
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <Button
+              className="max-h-[5rem] min-h-[3rem] w-12 rounded-lg"
+              variant="ghost"
+              size="icon"
+              disabled={isLoading}
+            >
+              <Send />
+            </Button>
+          </form>
+        </Form>
+      </main>
     </div>
   );
 }
