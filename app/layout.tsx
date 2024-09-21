@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 
 import { Londrina_Solid, Poppins } from "next/font/google";
 import "./globals.css";
@@ -31,11 +30,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookies = headers().get("cookie");
   return (
     <html lang="en">
-      <Provider cookies={cookies}>
-        <body className={`${poppins.variable} ${londrinaSolid.variable} antialiased`}>
+      <Provider>
+        <body
+          className={`${poppins.variable} ${londrinaSolid.variable} antialiased`}
+        >
           {children}
         </body>
       </Provider>
