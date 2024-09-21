@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+import { FaCode, FaPaintBrush, FaBullhorn, FaPen, FaVideo, FaRobot, FaMusic, FaBriefcase, FaComments } from 'react-icons/fa';
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
@@ -40,30 +42,30 @@ export default function Home() {
         </section>
       </main>
 
-      <section className="px-4 py-12">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 md:grid-cols-4">
-          {[
-            { icon: "💻", name: "Programming & Tech" },
-            { icon: "🎨", name: "Graphics & Design" },
-            { icon: "📱", name: "Digital Marketing" },
-            { icon: "✍️", name: "Writing & Translation" },
-            { icon: "🎥", name: "Video & Animation" },
-            { icon: "🤖", name: "AI Services" },
-            { icon: "🎵", name: "Music & Audio" },
-            { icon: "💼", name: "Business" },
-          ].map((category) => (
-            <div
-              key={category.name}
-              className="flex flex-col items-center text-center"
-            >
-              <div className="mb-2 text-3xl">{category.icon}</div>
-              <div className="font-sans text-sm font-normal text-primary dark:text-white md:text-base">
-                {category.name}
-              </div>
-            </div>
-          ))}
-        </div>
+      <section className="w-full max-w-6xl mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto">
+        {[
+          { icon: <FaCode className="text-2xl mr-3 text-blue-500" />, name: "Programming & Tech" },
+          { icon: <FaPaintBrush className="text-2xl mr-3 text-pink-500" />, name: "Graphics & Design" },
+          { icon: <FaBullhorn className="text-2xl mr-3 text-green-500" />, name: "Digital Marketing" },
+          { icon: <FaPen className="text-2xl mr-3 text-yellow-500" />, name: "Writing & Translation" },
+          { icon: <FaVideo className="text-2xl mr-3 text-red-500" />, name: "Video & Animation" },
+          { icon: <FaRobot className="text-2xl mr-3 text-purple-500" />, name: "AI Services" },
+          { icon: <FaMusic className="text-2xl mr-3 text-indigo-500" />, name: "Music & Audio" },
+          { icon: <FaBriefcase className="text-2xl mr-3 text-gray-500" />, name: "Business" },
+          { icon: <FaComments className="text-2xl mr-3 text-teal-500" />, name: "Consulting" },
+        ].map((category) => (
+          <div
+            key={category.name}
+            className="relative flex items-center p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-300 hover:bg-gradient-to-r from-green-100 to-transparent dark:hover:bg-gradient-to-r dark:from-zinc-800 dark:to-transparent cursor-pointer"
+          >
+            {category.icon}
+            <span className="text-gray-900 dark:text-gray-100">{category.name}</span>
+
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-green-200 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          </div>
+        ))}
       </section>
+
     </div>
   );
 }
