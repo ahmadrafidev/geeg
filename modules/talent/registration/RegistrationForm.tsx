@@ -215,7 +215,9 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ className }) => {
           )}
         />
 
-        <Button type="submit" disabled={isLoading}>Submit</Button>
+        <Button type="submit" disabled={isLoading}>
+          Submit
+        </Button>
       </form>
     </Form>
   );

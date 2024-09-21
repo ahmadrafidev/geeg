@@ -31,9 +31,9 @@ export const modal = createAppKit({
   metadata: metadata,
   allWallets: "HIDE",
   themeVariables: {
-    '--w3m-accent': '#34D399',
-    '--w3m-color-mix-strength': 0
-  }
+    "--w3m-accent": "#34D399",
+    "--w3m-color-mix-strength": 0,
+  },
 });
 
 function AccountProvider({ children }: { children: ReactNode }) {

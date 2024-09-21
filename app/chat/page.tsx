@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -18,7 +18,7 @@ export default function Chat() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch("/api/chat"); 
+        const response = await fetch("/api/chat");
         const data = await response.json();
         setMessages(data.messages);
       } catch (error) {
@@ -32,7 +32,7 @@ export default function Chat() {
   const handleSendMessage = async () => {
     if (inputMessage.trim()) {
       const newMessage: Message = { role: "user", content: inputMessage };
-      
+
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInputMessage("");
 
@@ -40,7 +40,7 @@ export default function Chat() {
         const response = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newMessage)
+          body: JSON.stringify(newMessage),
         });
 
         const data = await response.json();
@@ -53,8 +53,8 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-white dark:bg-black">
-      <main className="flex-grow flex flex-col p-4 overflow-y-auto space-y-4">
+    <div className="flex h-screen flex-col bg-white dark:bg-black">
+      <main className="flex flex-grow flex-col space-y-4 overflow-y-auto p-4">
         <div className="mb-8 flex justify-center">
           <Image alt="Chat icon" src="/icon.svg" width={60} height={60} />
         </div>
@@ -62,8 +62,10 @@ export default function Chat() {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`max-w-md p-4 my-2 rounded-lg shadow ${
-              msg.role === "user" ? "bg-primary text-white self-end text-base" : "bg-gray-200 text-black self-start"
+            className={`my-2 max-w-md rounded-lg p-4 shadow ${
+              msg.role === "user"
+                ? "self-end bg-primary text-base text-white"
+                : "self-start bg-gray-200 text-black"
             }`}
           >
             <p>{msg.content}</p>
@@ -71,20 +73,20 @@ export default function Chat() {
         ))}
       </main>
 
-      <footer className="bg-white dark:bg-gray-800 p-4">
-        <div className="flex items-center max-w-3xl mx-auto">
+      <footer className="bg-white p-4 dark:bg-gray-800">
+        <div className="mx-auto flex max-w-3xl items-center">
           <Input
-            className="flex-grow mr-2 md:w-3/4 min-h-[3rem] max-h-[5rem] rounded-lg"
+            className="mr-2 max-h-[5rem] min-h-[3rem] flex-grow rounded-lg md:w-3/4"
             placeholder="Type a message..."
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
           />
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="w-12 min-h-[3rem] max-h-[5rem] rounded-lg" 
+          <Button
+            variant="ghost"
+            size="icon"
+            className="max-h-[5rem] min-h-[3rem] w-12 rounded-lg"
             onClick={handleSendMessage}
           >
             <Send />

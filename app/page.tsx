@@ -41,15 +41,19 @@ export default function Home() {
               <br /> right away
             </h1>
 
-            <div className="flex space-x-1 rounded-lg border p-1 items-stretch">
+            <div className="flex items-stretch space-x-1 rounded-lg border p-1">
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for any talent, service, etc"
-                className="flex-grow md:w-3/4 min-h-[3rem] max-h-[5rem]"
+                className="max-h-[5rem] min-h-[3rem] flex-grow md:w-3/4"
               />
-              <Button size="icon" onClick={() => handleSearch()} className="w-12 min-h-[3rem] max-h-[5rem]">
-                <SearchIcon className="h-6 w-" />
+              <Button
+                size="icon"
+                onClick={() => handleSearch()}
+                className="max-h-[5rem] min-h-[3rem] w-12"
+              >
+                <SearchIcon className="w- h-6" />
               </Button>
             </div>
           </div>

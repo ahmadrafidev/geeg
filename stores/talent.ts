@@ -7,7 +7,7 @@ export const talentAtom = atomWithQuery((get) => ({
   queryFn: async () => {
     const address = get(accountAtom)?.address;
     if (address) {
-      const talent =  await getTalent({ address });
+      const talent = await getTalent({ address });
       console.log(talent);
       return talent;
     }
