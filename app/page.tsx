@@ -48,7 +48,7 @@ export default function Home() {
 
       <main className="flex flex-col px-16">
         <section className="bg-card py-32 rounded-2xl">
-          <div className="container mx-auto flex flex-col">
+          <div className="container mx-auto flex flex-col px-6">
             <h1 className="mb-4 font-londrina text-4xl font-bold tracking-wide text-card-foreground md:text-6xl">
               Find the right <span className="text-primary">Talent</span>,
               <br /> right away
