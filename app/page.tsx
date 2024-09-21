@@ -9,9 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import {
-  FaCode, FaPaintBrush, FaBullhorn, FaPen, FaVideo, FaRobot, FaMusic, FaBriefcase, FaComments
-} from "react-icons/fa";
-import { SearchIcon } from "lucide-react";
+  Code2Icon,
+  PaintbrushIcon,
+  MegaphoneIcon,
+  PenIcon,
+  VideoIcon,
+  BotIcon,
+  MusicIcon,
+  BriefcaseIcon,
+  MessageSquareIcon,
+  SearchIcon
+} from "lucide-react";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState(""); 
@@ -70,15 +78,15 @@ export default function Home() {
 
       <section className="w-full mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto px-16">
         {[
-          { icon: <FaCode className="text-2xl mr-3 text-blue-500" />, name: "Programming & Tech" },
-          { icon: <FaPaintBrush className="text-2xl mr-3 text-pink-500" />, name: "Graphics & Design" },
-          { icon: <FaBullhorn className="text-2xl mr-3 text-green-500" />, name: "Digital Marketing" },
-          { icon: <FaPen className="text-2xl mr-3 text-yellow-500" />, name: "Writing & Translation" },
-          { icon: <FaVideo className="text-2xl mr-3 text-red-500" />, name: "Video & Animation" },
-          { icon: <FaRobot className="text-2xl mr-3 text-purple-500" />, name: "AI Services" },
-          { icon: <FaMusic className="text-2xl mr-3 text-indigo-500" />, name: "Music & Audio" },
-          { icon: <FaBriefcase className="text-2xl mr-3 text-gray-500" />, name: "Business" },
-          { icon: <FaComments className="text-2xl mr-3 text-teal-500" />, name: "Consulting" },
+          { icon: <Code2Icon className="text-2xl mr-3 text-blue-500" />, name: "Programming & Tech" },
+          { icon: <PaintbrushIcon className="text-2xl mr-3 text-pink-500" />, name: "Graphics & Design" },
+          { icon: <MegaphoneIcon className="text-2xl mr-3 text-green-500" />, name: "Digital Marketing" },
+          { icon: <PenIcon className="text-2xl mr-3 text-yellow-500" />, name: "Writing & Translation" },
+          { icon: <VideoIcon className="text-2xl mr-3 text-red-500" />, name: "Video & Animation" },
+          { icon: <BotIcon className="text-2xl mr-3 text-purple-500" />, name: "AI Services" },
+          { icon: <MusicIcon className="text-2xl mr-3 text-indigo-500" />, name: "Music & Audio" },
+          { icon: <BriefcaseIcon className="text-2xl mr-3 text-gray-500" />, name: "Business" },
+          { icon: <MessageSquareIcon className="text-2xl mr-3 text-teal-500" />, name: "Consulting" },
         ].map((category) => (
           <Button
             variant="ghost"
