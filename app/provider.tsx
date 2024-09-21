@@ -18,7 +18,7 @@ const metadata = {
   description: "A Talend Finder Platform",
   url:
     process.env.NODE_ENV === "production"
-      ? "https://geeg.work"
+      ? "https://geeg.xyz"
       : "http://localhost:3000",
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
