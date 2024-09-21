@@ -1,13 +1,34 @@
+'use client'
+
+import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import Image from "next/image";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { FaCode, FaPaintBrush, FaBullhorn, FaPen, FaVideo, FaRobot, FaMusic, FaBriefcase, FaComments } from 'react-icons/fa';
+import {
+  FaCode, FaPaintBrush, FaBullhorn, FaPen, FaVideo, FaRobot, FaMusic, FaBriefcase, FaComments
+} from "react-icons/fa";
 import { SearchIcon } from "lucide-react";
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [isClient, setIsClient] = useState(false); 
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handleSearch = (query = searchQuery) => {
+    if (query.trim() !== "" && isClient) {
+      router.push(`/search?query=${encodeURIComponent(query)}`);
+    }
+  };
+  
+
   return (
     <div className="min-h-screen bg-white">
       <header className="sticky top-0 py-4 px-16">
@@ -34,8 +55,12 @@ export default function Home() {
             </h1>
 
             <div className="flex space-x-1 rounded-lg border p-1">
-              <Input placeholder="Search for any talent, service, etc" />
-              <Button size="icon">
+              <Input
+                value={searchQuery} // Bind the input to the state
+                onChange={(e) => setSearchQuery(e.target.value)} // Update the state on input change
+                placeholder="Search for any talent, service, etc"
+              />
+              <Button size="icon" onClick={handleSearch}>
                 <SearchIcon className="h-5 w-5" />
               </Button>
             </div>
@@ -59,6 +84,10 @@ export default function Home() {
             variant="ghost"
             key={category.name}
             className="relative flex items-center p-4 h-16 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-300 hover:bg-gradient-to-r from-green-100 to-transparent dark:hover:bg-gradient-to-r dark:from-zinc-800 dark:to-transparent cursor-pointer"
+            onClick={() => {
+              setSearchQuery(category.name); 
+              handleSearch(category.name);
+            }}
           >
             {category.icon}
             <span className="text-gray-900 dark:text-gray-100">{category.name}</span>
@@ -67,7 +96,6 @@ export default function Home() {
           </Button>
         ))}
       </section>
-
     </div>
   );
 }
