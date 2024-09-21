@@ -10,10 +10,10 @@ import { SearchIcon } from "lucide-react";
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 py-4">
-        <div className="container mx-auto flex items-center justify-between">
+      <header className="sticky top-0 py-4 px-16">
+        <div className="flex items-center justify-between">
           <Link className="flex items-center space-x-1 text-primary" href="/">
-            <Image alt="" src="/icon.svg" width={20} height={20} />
+            <Image alt="" src="/icon.svg" width={22} height={22} />
             <p className="font-londrina text-2xl font-black tracking-wider">
               Geeg
             </p>
@@ -21,13 +21,12 @@ export default function Home() {
 
           <nav className="hidden space-x-4 md:flex">
             <w3m-button />
-            {/* <Button>Join</Button> */}
           </nav>
         </div>
       </header>
 
-      <main className="flex flex-col">
-        <section className="bg-card py-32">
+      <main className="flex flex-col px-16">
+        <section className="bg-card py-32 rounded-2xl">
           <div className="container mx-auto flex flex-col">
             <h1 className="mb-4 font-londrina text-4xl font-bold tracking-wide text-card-foreground md:text-6xl">
               Find the right <span className="text-primary">Talent</span>,
@@ -44,7 +43,7 @@ export default function Home() {
         </section>
       </main>
 
-      <section className="w-full max-w-6xl mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto">
+      <section className="w-full mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto px-16">
         {[
           { icon: <FaCode className="text-2xl mr-3 text-blue-500" />, name: "Programming & Tech" },
           { icon: <FaPaintBrush className="text-2xl mr-3 text-pink-500" />, name: "Graphics & Design" },
@@ -56,15 +55,16 @@ export default function Home() {
           { icon: <FaBriefcase className="text-2xl mr-3 text-gray-500" />, name: "Business" },
           { icon: <FaComments className="text-2xl mr-3 text-teal-500" />, name: "Consulting" },
         ].map((category) => (
-          <div
+          <Button
+            variant="ghost"
             key={category.name}
-            className="relative flex items-center p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-300 hover:bg-gradient-to-r from-green-100 to-transparent dark:hover:bg-gradient-to-r dark:from-zinc-800 dark:to-transparent cursor-pointer"
+            className="relative flex items-center p-4 h-16 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-300 hover:bg-gradient-to-r from-green-100 to-transparent dark:hover:bg-gradient-to-r dark:from-zinc-800 dark:to-transparent cursor-pointer"
           >
             {category.icon}
             <span className="text-gray-900 dark:text-gray-100">{category.name}</span>
 
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-green-200 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-          </div>
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-green-200 to-green-600 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          </Button>
         ))}
       </section>
 

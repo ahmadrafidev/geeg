@@ -26,7 +26,7 @@ createAppKit({
   adapters: [wagmiAdapter],
   defaultNetwork: networks[0],
   metadata: metadata,
-  allWallets: "HIDE"
+  allWallets: "HIDE",
 });
 
 function Provider({
