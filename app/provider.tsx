@@ -2,11 +2,14 @@
 
 import { type ReactNode } from "react";
 
-import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
+import { useAccountEffect, WagmiProvider, type Config } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { createAppKit } from "@reown/appkit/react";
 import { wagmiAdapter, projectId, networks } from "@/constants/wagmi";
+
+import { useSetAtom } from "jotai";
+import { accountAtom } from "@/stores/account";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +23,7 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 
-createAppKit({
+export const modal = createAppKit({
   projectId,
   networks,
   adapters: [wagmiAdapter],
@@ -33,24 +36,25 @@ createAppKit({
   }
 });
 
-function Provider({
-  children,
-  cookies,
-}: {
-  children: ReactNode;
-  cookies: string | null;
-}) {
-  const initialState = cookieToInitialState(
-    wagmiAdapter.wagmiConfig as Config,
-    cookies,
-  );
+function AccountProvider({ children }: { children: ReactNode }) {
+  const setAccount = useSetAtom(accountAtom);
+  useAccountEffect({
+    onConnect: (data) => {
+      console.log(data);
+      setAccount(data);
+    },
+    onDisconnect: () => setAccount(undefined),
+  });
 
+  return children;
+}
+
+function Provider({ children }: { children: ReactNode }) {
   return (
-    <WagmiProvider
-      config={wagmiAdapter.wagmiConfig as Config}
-      initialState={initialState}
-    >
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <WagmiProvider config={wagmiAdapter.wagmiConfig as Config}>
+      <QueryClientProvider client={queryClient}>
+        <AccountProvider>{children}</AccountProvider>
+      </QueryClientProvider>
     </WagmiProvider>
   );
 }

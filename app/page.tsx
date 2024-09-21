@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/modules/Navbar";
 
 import {
   Code2Icon,
@@ -23,36 +22,17 @@ import {
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const handleSearch = (query = searchQuery) => {
-    if (query.trim() !== "" && isClient) {
+    if (query.trim() !== "") {
       router.push(`/search?query=${encodeURIComponent(query)}`);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="sticky top-0 px-16 py-4">
-        <div className="flex items-center justify-between">
-          <Link className="flex items-center space-x-1 text-primary" href="/">
-            <Image alt="" src="/icon.svg" width={22} height={22} />
-            <p className="font-londrina text-2xl font-black tracking-wider">
-              Geeg
-            </p>
-          </Link>
-
-          <nav className="hidden space-x-4 md:flex">
-            <w3m-button />
-          </nav>
-        </div>
-      </header>
-
+    <div className="min-h-screen">
+      <Navbar />
       <main className="flex flex-col px-16">
         <section className="rounded-2xl bg-card py-32">
           <div className="container mx-auto flex flex-col px-6">
