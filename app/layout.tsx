@@ -15,7 +15,8 @@ const londrinaSolid = Londrina_Solid({
 
 export const metadata: Metadata = {
   title: "Geeg - A Talent Finder Platform",
-  description: "Geeg is a talent finder platform to make it easy to you finished your business.",
+  description:
+    "Geeg is a talent finder platform to make it easy to you finished your business.",
 };
 
 export default function RootLayout({
