@@ -20,7 +20,7 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 
-createAppKit({
+export const modal = createAppKit({
   projectId,
   networks,
   adapters: [wagmiAdapter],
