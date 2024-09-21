@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run migrate:deploy && next dev",
+    "dev": "pnpm run prisma:migrate:deploy && next dev",
+    "start": "pnpm run prisma:migrate:deploy && next start",
     "build": "next build",
-    "start": "npm run migrate:deploy && next start",
     "lint": "next lint",
     "format": "prettier --write . & prisma format",
-    "migrate:dev": "prisma migrate dev",
-    "migrate:deploy": "prisma migrate deploy",
-    "migrate:status": "prisma migrate status",
-    "generate": "prisma generate",
-    "postinstall": "npm run generate"
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:migrate:status": "prisma migrate status",
+    "prisma:generate": "prisma generate",
+    "typechain:generate": "typechain --target=ethers-v6 abis/**/*.json --out-dir=contracts/",
+    "postinstall": "npm run prisma:generate && npm run typechain:generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -27,6 +28,7 @@
     "@wagmi/core": "^2.13.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "ethers": "^6.13.2",
     "jotai": "^2.10.0",
     "jotai-tanstack-query": "^0.8.8",
     "lucide-react": "^0.441.0",
@@ -42,6 +44,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@typechain/ethers-v6": "^0.5.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -51,6 +54,7 @@
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "tailwindcss": "^3.4.1",
+    "typechain": "^8.3.2",
     "typescript": "^5"
   }
 }
