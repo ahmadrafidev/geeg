@@ -68,7 +68,7 @@ export default function Home() {
                 placeholder="Search for any talent, service, etc"
                 className="flex-grow md:w-3/4 min-h-[3rem] max-h-[5rem]"
               />
-              <Button size="icon" onClick={() => handleSearch()} className="w-1/12 min-h-[3rem] max-h-[5rem]">
+              <Button size="icon" onClick={() => handleSearch()} className="w-12 min-h-[3rem] max-h-[5rem]">
                 <SearchIcon className="h-6 w-" />
               </Button>
             </div>
