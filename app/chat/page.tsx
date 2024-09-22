@@ -31,7 +31,7 @@ export default function ChatPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const router = useRouter();
-  const query = searchParams["q"];
+  const query = Array.isArray(searchParams["q"]) ? searchParams["q"][0] : searchParams["q"];
 
   const [messages, setMessages] = useState<Message[]>([]);
   const brief = useMemo(() => {
